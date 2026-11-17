@@ -19,6 +19,8 @@ namespace CORE.Concretes.Entities.Store
         public int ModelId { get; set; }
         public virtual Model Model { get; set; } = null!;
 
+        public int Stock { get; set; }
+
         public virtual ICollection<ProductImage> Images { get; set; } = [];
         public virtual ICollection<ProductAttribute> Attributes { get; set; } = [];
         public virtual ICollection<ProductComment> Comments { get; set; } = [];
