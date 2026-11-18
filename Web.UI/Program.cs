@@ -24,6 +24,10 @@ app.UseAuthorization();
 
 app.MapStaticAssets();
 
+// Örn. https://example.com/ (controller:home, action:index) veya
+// https://example.com/dashboard (controller:dashboard, action:index) veya
+// https://example.com/dashboard/categories (controller:dashboard, action:categories) veya
+// https://example.com/dashboard/categories/37 (controller:dashboard, action:categories, id:37)
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}")

@@ -1,0 +1,73 @@
+﻿@model CategoriesViewModel
+@{
+    ViewData["Title"] = "Kategori Yönetimi";
+}
+
+<div class="row g-4">
+    <div class="col-md-6">
+        <h5>Kategoriler:</h5>
+        <div class="card rounded-0 shadow-sm">
+            <div class="card-body">
+                <form method="post">
+                    <label asp-for="NewCategoryName" class="h5"></label>
+                    <span asp-validation-for="NewCategoryName" class="text-danger small"></span>
+                    <div class="input-group">
+                        <input class="form-control" asp-for="NewCategoryName" />
+                        <button class="btn btn-outline-secondary" type="submit">Ekle</button>
+                    </div>
+                </form>
+                <hr />
+                @if (Model.Categories.Any())
+                {
+                    <div class="list-group list-group-flush">
+                        @foreach (var item in Model.Categories)
+                        {
+                            string status = Model.NewSubCategory != null && Model.NewSubCategory.ParentId == item.Id? "active" : "";
+
+                            <a asp-action="categories" asp-controller="dashboard" asp-route-id="@item.Id" class="list-group-item list-group-item-action @status">
+                                @item.Name
+                            </a>
+                        }
+                    </div>
+                }
+                else
+                {
+                    <h6 class="text-muted">
+                        Kayıtlı kategori bulunamadı! Kategori ekleyin!
+                    </h6>
+                }
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <h5>Alt Kategoriler:</h5>
+        <div class="card rounded-0 shadow-sm">
+            <div class="card-body">
+                @if(Model.NewSubCategory != null)
+                {
+                    <form method="post" asp-action="AddSubCategory">
+                        <input type="hidden" asp-for="NewSubCategory.ParentId" />
+                        <label asp-for="NewSubCategory.NewSubCategoryName" class="h5"></label>
+                        <span asp-validation-for="NewSubCategory.NewSubCategoryName" class="text-danger small"></span>
+                        <div class="input-group">
+                            <input class="form-control" asp-for="NewSubCategory.NewSubCategoryName" />
+                            <button class="btn btn-outline-secondary" type="submit">Ekle</button>
+                        </div>
+                    </form>
+                    <hr />
+                }
+
+                @if (Model.SubCategories.Any())
+                {
+                    
+                }
+                else
+                {
+                    <h6 class="text-muted">
+                        Kayıtlı alt kategori bulunamadı! Kategori seçin veya alt kategori ekleyin!
+                    </h6>
+                }
+            </div>
+        </div>
+    </div>
+</div>
