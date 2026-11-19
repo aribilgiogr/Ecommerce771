@@ -3,28 +3,50 @@
     ViewData["Title"] = "Kategori Yönetimi";
 }
 
-<div class="row g-4">
+<div class="row g-5">
     <div class="col-md-6">
-        <h5>Kategoriler:</h5>
-        <div class="card rounded-0 shadow-sm">
+        <div class="card rounded-0 shadow border-0">
             <div class="card-body">
-                <form method="post">
-                    <label asp-for="NewCategoryName" class="h5"></label>
-                    <span asp-validation-for="NewCategoryName" class="text-danger small"></span>
-                    <div class="input-group">
-                        <input class="form-control" asp-for="NewCategoryName" />
-                        <button class="btn btn-outline-secondary" type="submit">Ekle</button>
-                    </div>
-                </form>
+                <h4>Kayıtlı Kategoriler:</h4>
+                <hr />
+                @if (Model.SelectedCategory == null)
+                {
+                    <form method="post" asp-action="addcategory">
+                        <label asp-for="NewCategory.Name" class="h5"></label>
+                        <div class="input-group">
+                            <input class="form-control" asp-for="NewCategory.Name">
+                            <button class="btn btn-outline-secondary" type="submit">Ekle</button>
+                        </div>
+                        <span asp-validation-for="NewCategory.Name" class="small text-danger"></span>
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    </form>
+                }
+                else
+                {
+                    <form method="post" asp-action="renamecategory" onsubmit="return confirm('Emin misiniz?')">
+                        <input type="hidden" asp-for="SelectedCategory.Id" />
+                        <label asp-for="SelectedCategory.Name" class="h5">Kategori Adı:</label>
+                        <div class="input-group">
+                            <input class="form-control" asp-for="SelectedCategory.Name">
+                            <button class="btn btn-outline-secondary" type="submit">Güncelle</button>
+                            <button class="btn btn-outline-danger" type="submit" asp-action="removecategory" asp-route-id="@Model.SelectedCategory.Id">Sil</button>
+                            <a class="btn btn-dark" asp-action="categories" asp-route-id="@null">Vazgeç</a>
+                        </div>
+                        <span asp-validation-for="SelectedCategory.Name" class="small text-danger"></span>
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    </form>
+                }
                 <hr />
                 @if (Model.Categories.Any())
                 {
                     <div class="list-group list-group-flush">
                         @foreach (var item in Model.Categories)
                         {
-                            string status = Model.NewSubCategory != null && Model.NewSubCategory.ParentId == item.Id? "active" : "";
-
-                            <a asp-action="categories" asp-controller="dashboard" asp-route-id="@item.Id" class="list-group-item list-group-item-action @status">
+                            string status = Model.SelectedCategory?.Id != item.Id ? "" : "active";
+                            <a asp-action="categories"
+                               asp-controller="dashboard"
+                               asp-route-id="@item.Id"
+                               class="list-group-item list-group-item-action @status">
                                 @item.Name
                             </a>
                         }
@@ -32,39 +54,53 @@
                 }
                 else
                 {
-                    <h6 class="text-muted">
-                        Kayıtlı kategori bulunamadı! Kategori ekleyin!
+                    <h6 class="text-muted text-center">
+                        Kayıtlı kategori bulunamadı!
                     </h6>
                 }
             </div>
         </div>
     </div>
     <div class="col-md-6">
-        <h5>Alt Kategoriler:</h5>
-        <div class="card rounded-0 shadow-sm">
+        <div class="card rounded-0 shadow border-0">
             <div class="card-body">
-                @if(Model.NewSubCategory != null)
+                @if (Model.SelectedCategory != null)
                 {
-                    <form method="post" asp-action="AddSubCategory">
-                        <input type="hidden" asp-for="NewSubCategory.ParentId" />
-                        <label asp-for="NewSubCategory.NewSubCategoryName" class="h5"></label>
-                        <span asp-validation-for="NewSubCategory.NewSubCategoryName" class="text-danger small"></span>
+                    <h4>"@Model.SelectedCategory?.Name" Kategorisine Kayıtlı Alt Kategoriler:</h4>
+                    <hr />
+                    <form method="post" asp-action="addsubcategory">
+                        <input asp-for="NewSubCategory.ParentId" type="hidden" />
+                        <label asp-for="NewSubCategory.Name" class="h5"></label>
                         <div class="input-group">
-                            <input class="form-control" asp-for="NewSubCategory.NewSubCategoryName" />
+                            <input class="form-control" asp-for="NewSubCategory.Name">
                             <button class="btn btn-outline-secondary" type="submit">Ekle</button>
                         </div>
+                        <span asp-validation-for="NewSubCategory.Name" class="small text-danger"></span>
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                     </form>
                     <hr />
-                }
-
-                @if (Model.SubCategories.Any())
-                {
-                    
+                    @if (Model.SubCategories.Any())
+                    {
+                        <div class="list-group list-group-flush">
+                            @foreach (var item in Model.SubCategories)
+                            {
+                                <a class="list-group-item list-group-item-action">
+                                    @item.Name
+                                </a>
+                            }
+                        </div>
+                    }
+                    else
+                    {
+                        <h6 class="text-muted text-center">
+                            Kayıtlı alt kategori bulunamadı!
+                        </h6>
+                    }
                 }
                 else
                 {
-                    <h6 class="text-muted">
-                        Kayıtlı alt kategori bulunamadı! Kategori seçin veya alt kategori ekleyin!
+                    <h6 class="text-muted text-center">
+                        Kayıtlı alt kategorileri görmek için kategori seçiniz!
                     </h6>
                 }
             </div>
