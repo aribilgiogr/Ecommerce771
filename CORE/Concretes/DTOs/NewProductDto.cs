@@ -24,11 +24,11 @@ namespace CORE.Concretes.DTOs
 
         [Display(Name = "İndirim Oranı", Prompt = "0 ~ 100 arası değer.")]
         [Range(0, 100, ErrorMessage = "İndirim oranı 0 ~ 100 arası bir değer alabilir!")]
-        public double? DiscountRate { get; init; } = 0;
+        public double DiscountRate { get; init; } = 0;
 
         [Display(Name = "Vergi Dilimi", Prompt = "Uygulanacak vergi dilimi.")]
         [AllowedValues(0, 1, 10, 20, ErrorMessage = "Verigi dilimi sadece 0%, 1%, 10% veya 20% olabilir!")]
-        public decimal TaxRate { get; init; }
+        public double TaxRate { get; init; }
 
         [Display(Name = "Kategori", Prompt = "Ürün Kategorisi")]
         [Required(ErrorMessage = "Kategori seçimi zorunludur!")]
@@ -44,6 +44,6 @@ namespace CORE.Concretes.DTOs
 
         [Display(Name = "Stok", Prompt = "Ürün stok miktarı")]
         [Range(0, int.MaxValue, ErrorMessage = "Stok miktarı sadece pozitif değer alabilir!")]
-        public int? Stock { get; init; } = 0;
+        public int Stock { get; init; } = 0;
     }
 }
