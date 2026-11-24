@@ -1,4 +1,5 @@
-﻿using BLL.Services;
+﻿using BLL.Maps;
+using BLL.Services;
 using CORE.Abstracts.IServices;
 using CORE.Utils;
 using DAL.Contexts;
@@ -16,7 +17,15 @@ namespace BLL.Middlewares
 
             services.AddScoped<IUnitOfWork, UnitOfWork<StoreContext>>();
 
+            services.AddAutoMapper(cfg =>
+            {
+                cfg.AddProfile<ProductProfile>();
+            });
+
             services.AddScoped<ICategoryService, CategoryService>();
+            services.AddScoped<IBrandService, BrandService>();
+            services.AddScoped<IModelService, ModelService>();
+            services.AddScoped<IProductService, ProductService>();
 
             return services;
         }
