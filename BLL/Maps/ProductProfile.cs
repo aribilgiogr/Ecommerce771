@@ -8,6 +8,8 @@ namespace BLL.Maps
     {
         public ProductProfile()
         {
+           
+
             // DTO -> Entity
             CreateMap<NewProductDto, Product>();
 

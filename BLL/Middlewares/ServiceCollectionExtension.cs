@@ -19,7 +19,9 @@ namespace BLL.Middlewares
 
             services.AddAutoMapper(cfg =>
             {
+                cfg.ShouldUseConstructor = ctor => ctor.IsPublic;
                 cfg.AddProfile<ProductProfile>();
+                cfg.AddProfile<BrandProfile>();
             });
 
             services.AddScoped<ICategoryService, CategoryService>();
