@@ -16,7 +16,7 @@ namespace CORE.Concretes.DTOs
                                      string SubCategoryName,
                                      int ModelId,
                                      string ModelName,
-                                     string CoverImageUrl,
+                                     string? CoverImageUrl,
                                      int CommentCount,
                                      int Rating);
 }

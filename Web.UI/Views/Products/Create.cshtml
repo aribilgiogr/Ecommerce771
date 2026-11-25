@@ -1,0 +1,69 @@
+﻿@model NewProductDto
+@{
+    ViewData["Title"] = "Yeni Ürün Ekle";
+}
+<div class="row">
+    <div class="col-md-6 mx-auto">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">
+                    @ViewData["Title"]
+                </h5>
+                <hr />
+                <form method="post">
+                    @Html.AntiForgeryToken()
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="form-floating mb-3">
+                        <input asp-for="Title" class="form-control" />
+                        <label asp-for="Title"></label>
+                        <span asp-validation-for="Title" class="text-danger"></span>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <textarea asp-for="Description" class="form-control"></textarea>
+                        <label asp-for="Description"></label>
+                        <span asp-validation-for="Description" class="text-danger"></span>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input asp-for="Price" class="form-control" />
+                        <label asp-for="Price"></label>
+                        <span asp-validation-for="Price" class="text-danger"></span>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input asp-for="DiscountRate" class="form-control" />
+                        <label asp-for="DiscountRate"></label>
+                        <span asp-validation-for="DiscountRate" class="text-danger"></span>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input asp-for="TaxRate" class="form-control" />
+                        <label asp-for="TaxRate"></label>
+                        <span asp-validation-for="TaxRate" class="text-danger"></span>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input asp-for="SubCategoryId" class="form-control" />
+                        <label asp-for="SubCategoryId"></label>
+                        <span asp-validation-for="SubCategoryId" class="text-danger"></span>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input asp-for="ModelId" class="form-control" />
+                        <label asp-for="ModelId"></label>
+                        <span asp-validation-for="ModelId" class="text-danger"></span>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input asp-for="BrandId" class="form-control" />
+                        <label asp-for="BrandId"></label>
+                        <span asp-validation-for="BrandId" class="text-danger"></span>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input asp-for="Stock" class="form-control" />
+                        <label asp-for="Stock"></label>
+                        <span asp-validation-for="Stock" class="text-danger"></span>
+                    </div>
+                    <div class="d-flex justify-content-between">
+                        <a asp-action="index" asp-controller="brand" class="btn btn-secondary">Vazgeç</a>
+                        <button class="btn btn-primary" type="submit">Kaydet</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

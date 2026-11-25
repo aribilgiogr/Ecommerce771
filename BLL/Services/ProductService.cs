@@ -50,7 +50,10 @@ namespace BLL.Services
                                .Include(p => p.SubCategory)
                                .ThenInclude(s => s.Category)
                                .Include(p => p.Model)
-                               .Include(p => p.Brand);
+                               .Include(p => p.Brand)
+                               .Include(p => p.Comments)
+                               .Include(p => p.Images)
+                               .ToList();
 
             return mapper.Map<IEnumerable<ProductListItemDto>>(products);
         }

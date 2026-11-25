@@ -1,15 +1,23 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using CORE.Abstracts.IServices;
+using CORE.Concretes.DTOs;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Web.UI.Controllers
 {
     public class ProductsController : Controller
     {
+        private readonly IProductService service;
+
+        public ProductsController(IProductService service)
+        {
+            this.service = service;
+        }
 
         // GET: ProductsController
         public ActionResult Index()
         {
-            return View();
+            return View(service.GetProducts());
         }
 
         // GET: ProductsController/Details/5
@@ -27,16 +35,24 @@ namespace Web.UI.Controllers
         // POST: ProductsController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public async Task<ActionResult> Create(NewProductDto model)
         {
-            try
+            if (ModelState.IsValid)
             {
-                return RedirectToAction(nameof(Index));
+                var reply = await service.CreateProductAsync(model);
+                if (reply.IsSuccess)
+                {
+                    return RedirectToAction("index");
+                }
+                if (reply.Errors != null)
+                {
+                    foreach (var err in reply.Errors)
+                    {
+                        ModelState.AddModelError(string.Empty, err);
+                    }
+                }
             }
-            catch
-            {
-                return View();
-            }
+            return View(model);
         }
 
         // GET: ProductsController/Edit/5
@@ -60,25 +76,18 @@ namespace Web.UI.Controllers
             }
         }
 
-        // GET: ProductsController/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
-
         // POST: ProductsController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        public async Task<ActionResult> Delete(int id)
         {
-            try
+            var reply = await service.DeleteProductAsync(id);
+            if (reply.IsSuccess)
             {
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("index");
             }
-            catch
-            {
-                return View();
-            }
+            string errors = reply.Errors != null ? string.Join(", ", reply.Errors) : "";
+            return Problem(errors);
         }
     }
 }

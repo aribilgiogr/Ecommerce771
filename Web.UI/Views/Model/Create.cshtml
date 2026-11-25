@@ -1,0 +1,29 @@
+﻿@model ModelDto
+@{
+    ViewData["Title"] = "Yeni Model Ekle";
+}
+<div class="row">
+    <div class="col-md-6 mx-auto">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">
+                    @ViewData["Title"]
+                </h5>
+                <hr />
+                <form method="post">
+                    @Html.AntiForgeryToken()
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="form-floating mb-3">
+                        <input asp-for="Name" class="form-control" placeholder="Örn. Ceket, Tekerlek, Kask vb" />
+                        <label asp-for="Name">Model Adı</label>
+                        <span asp-validation-for="Name" class="text-danger"></span>
+                    </div>
+                    <div class="d-flex justify-content-between">
+                        <a asp-action="index" class="btn btn-secondary">Vazgeç</a>
+                        <button class="btn btn-primary" type="submit">Kaydet</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

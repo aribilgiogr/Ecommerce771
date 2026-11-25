@@ -27,7 +27,7 @@ namespace CORE.Concretes.DTOs
         public double DiscountRate { get; init; } = 0;
 
         [Display(Name = "Vergi Dilimi", Prompt = "Uygulanacak vergi dilimi.")]
-        [AllowedValues(0, 1, 10, 20, ErrorMessage = "Verigi dilimi sadece 0%, 1%, 10% veya 20% olabilir!")]
+        [AllowedValues(0d, 1d, 10d, 20d, ErrorMessage = "Vergi dilimi sadece 0%, 1%, 10% veya 20% olabilir!")]
         public double TaxRate { get; init; }
 
         [Display(Name = "Kategori", Prompt = "Ürün Kategorisi")]

@@ -1,4 +1,5 @@
-﻿using BLL.Maps;
+﻿using AutoMapper;
+using BLL.Maps;
 using BLL.Services;
 using CORE.Abstracts.IServices;
 using CORE.Utils;
@@ -22,6 +23,7 @@ namespace BLL.Middlewares
                 cfg.ShouldUseConstructor = ctor => ctor.IsPublic;
                 cfg.AddProfile<ProductProfile>();
                 cfg.AddProfile<BrandProfile>();
+                cfg.AddProfile<ModelProfile>();
             });
 
             services.AddScoped<ICategoryService, CategoryService>();

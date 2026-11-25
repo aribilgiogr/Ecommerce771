@@ -1,0 +1,42 @@
+﻿@model IEnumerable<ProductListItemDto>
+@{
+    ViewData["Title"] = "Kayıtlı Ürünler";
+}
+<h2>@ViewData["Title"]</h2>
+<a class="btn btn-primary mb-4" asp-action="create">Yeni Ürün Ekle</a>
+<form method="post" onsubmit="return confirm('Emin misiniz?')">
+    <div class="row row-cols-1 row-cols-md-3 row-cols-xl-5 g-4">
+        @foreach (var item in Model)
+        {
+            <div class="col">
+                <div class="card border-1 shadow-sm">
+                    <img src="@(item.CoverImageUrl ?? "https://placehold.co/800x450?text=Görsel+Yok")" class="card-img-top" alt="@item.Title" />
+                    <div class="card-body">
+                        <h5 class="card-title">@item.Title</h5>
+                        <h6 class="text-muted">
+                            @item.BrandName |
+                            @item.CategoryName > @item.SubCategoryName |
+                            @item.ModelName
+                        </h6>
+                        <p class="text-dark fw-semibold">@item.Rating⭐ (@item.CommentCount)</p>
+                        <p class="fw-semibold">
+                            @if(item.DiscountedPrice == item.ListPrice)
+                            {
+                                <span class="text-success">@item.ListPrice.ToString("C2")</span>
+                            }
+                            else
+                            {
+                                <del class="text-danger">@item.ListPrice.ToString("C2")</del>
+                                <span class="text-success">@item.DiscountedPrice.ToString("C2")</span>
+                            }
+                        </p>
+                        <div class="d-flex justify-content-between">
+                            <a class="btn btn-sm btn-info" asp-action="edit" asp-route-id="@item.Id">Düzenle</a>
+                            <button class="btn btn-sm btn-danger" type="submit" asp-action="delete" asp-route-id="@item.Id">Sil</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</form>
