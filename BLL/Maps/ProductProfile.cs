@@ -13,6 +13,9 @@ namespace BLL.Maps
             // DTO -> Entity
             CreateMap<NewProductDto, Product>();
 
+            // DTO -> Entity, Entity -> DTO
+            CreateMap<EditProductDto, Product>().ReverseMap();
+
             // Entity -> DTO
             CreateMap<Product, ProductListItemDto>()
                 .ForCtorParam("ListPrice", opt => opt.MapFrom(src => src.Price * (decimal)(1 + src.TaxRate / 100)))

@@ -43,6 +43,17 @@ namespace BLL.Services
             return Reply.Fail("Ürün bulunamadı!");
         }
 
+        public async Task<EditProductDto?> GetProductForEditAsync(int id)
+        {
+            var repo = unitOfWork.GetRepository<Product>();
+            var product = await repo.Query().FirstOrDefaultAsync(p => p.Id == id);
+            if (product != null)
+            {
+                return mapper.Map<EditProductDto>(product);
+            }
+            return null;
+        }
+
         public IEnumerable<ProductListItemDto> GetProducts()
         {
             var repo = unitOfWork.GetRepository<Product>();
@@ -56,6 +67,29 @@ namespace BLL.Services
                                .ToList();
 
             return mapper.Map<IEnumerable<ProductListItemDto>>(products);
+        }
+
+        public async Task<Reply> UpdateProductAsync(int id, EditProductDto updatedProduct)
+        {
+            var repo = unitOfWork.GetRepository<Product>();
+            var product = await repo.Query().FirstOrDefaultAsync(p => p.Id == id);
+            if (product != null && updatedProduct.Id == product.Id)
+            {
+                product.Title = updatedProduct.Title;
+                product.Description = updatedProduct.Description;
+                product.Price = updatedProduct.Price;
+                product.DiscountRate = updatedProduct.DiscountRate;
+                product.TaxRate = updatedProduct.TaxRate;
+                product.BrandId = updatedProduct.BrandId;
+                product.SubCategoryId = updatedProduct.SubCategoryId;
+                product.ModelId = updatedProduct.ModelId;
+                product.Stock = updatedProduct.Stock;
+                product.Active = updatedProduct.Active;
+
+                repo.UpdateOne(product);
+                return await unitOfWork.CommitAsync();
+            }
+            return Reply.Fail("Ürün bulunamadı!");
         }
     }
 }

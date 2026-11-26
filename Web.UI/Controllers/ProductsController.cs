@@ -2,16 +2,22 @@
 using CORE.Concretes.DTOs;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Web.UI.Controllers
 {
     public class ProductsController : Controller
     {
         private readonly IProductService service;
-
-        public ProductsController(IProductService service)
+        private readonly IBrandService brandService;
+        private readonly IModelService modelService;
+        private readonly ICategoryService categoryService;
+        public ProductsController(IProductService service, IBrandService brandService, IModelService modelService, ICategoryService categoryService)
         {
             this.service = service;
+            this.brandService = brandService;
+            this.modelService = modelService;
+            this.categoryService = categoryService;
         }
 
         // GET: ProductsController
@@ -29,6 +35,10 @@ namespace Web.UI.Controllers
         // GET: ProductsController/Create
         public ActionResult Create()
         {
+            ViewBag.Brands = new SelectList(brandService.GetBrands(), "Id", "Name");
+            ViewBag.Models = new SelectList(modelService.GetModels(), "Id", "Name");
+            ViewBag.Categories = new SelectList(categoryService.GetSubCategories(), "Id", "Name", null, "ParentName");
+            ViewBag.TaxRates = new SelectList(new double[] { 0, 1, 10, 20 });
             return View();
         }
 
@@ -52,28 +62,53 @@ namespace Web.UI.Controllers
                     }
                 }
             }
+            ViewBag.Brands = new SelectList(brandService.GetBrands(), "Id", "Name", model.BrandId);
+            ViewBag.Models = new SelectList(modelService.GetModels(), "Id", "Name", model.ModelId);
+            ViewBag.Categories = new SelectList(categoryService.GetSubCategories(), "Id", "Name", model.SubCategoryId, "ParentName");
+            ViewBag.TaxRates = new SelectList(new double[] { 0, 1, 10, 20 }, model.TaxRate);
             return View(model);
         }
 
         // GET: ProductsController/Edit/5
-        public ActionResult Edit(int id)
+        public async Task<ActionResult> Edit(int id)
         {
-            return View();
+            var model = await service.GetProductForEditAsync(id);
+            if (model != null)
+            {
+                ViewBag.Brands = new SelectList(brandService.GetBrands(), "Id", "Name", model.BrandId);
+                ViewBag.Models = new SelectList(modelService.GetModels(), "Id", "Name", model.ModelId);
+                ViewBag.Categories = new SelectList(categoryService.GetSubCategories(), "Id", "Name", model.SubCategoryId, "ParentName");
+                ViewBag.TaxRates = new SelectList(new double[] { 0, 1, 10, 20 }, model.TaxRate);
+                return View(model);
+            }
+            return NotFound();
         }
 
         // POST: ProductsController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public async Task<ActionResult> Edit(int id, EditProductDto model)
         {
-            try
+            if (ModelState.IsValid)
             {
-                return RedirectToAction(nameof(Index));
+                var reply = await service.UpdateProductAsync(id, model);
+                if (reply.IsSuccess)
+                {
+                    return RedirectToAction("index");
+                }
+                if (reply.Errors != null)
+                {
+                    foreach (var err in reply.Errors)
+                    {
+                        ModelState.AddModelError(string.Empty, err);
+                    }
+                }
             }
-            catch
-            {
-                return View();
-            }
+            ViewBag.Brands = new SelectList(brandService.GetBrands(), "Id", "Name", model.BrandId);
+            ViewBag.Models = new SelectList(modelService.GetModels(), "Id", "Name", model.ModelId);
+            ViewBag.Categories = new SelectList(categoryService.GetSubCategories(), "Id", "Name", model.SubCategoryId, "ParentName");
+            ViewBag.TaxRates = new SelectList(new double[] { 0, 1, 10, 20 }, model.TaxRate);
+            return View(model);
         }
 
         // POST: ProductsController/Delete/5
@@ -88,6 +123,16 @@ namespace Web.UI.Controllers
             }
             string errors = reply.Errors != null ? string.Join(", ", reply.Errors) : "";
             return Problem(errors);
+        }
+
+        public IActionResult AddImage(int id)
+        {
+            return View();
+        }
+
+        public IActionResult AddAttribute(int id)
+        {
+            return View();
         }
     }
 }

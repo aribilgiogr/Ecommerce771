@@ -34,24 +34,41 @@
                         <span asp-validation-for="DiscountRate" class="text-danger"></span>
                     </div>
                     <div class="form-floating mb-3">
-                        <input asp-for="TaxRate" class="form-control" />
+                        <select asp-for="TaxRate" class="form-select" asp-items="ViewBag.TaxRates">
+                            <option value="">Vergi Dilimi Seçiniz</option>
+                        </select>
                         <label asp-for="TaxRate"></label>
                         <span asp-validation-for="TaxRate" class="text-danger"></span>
                     </div>
                     <div class="form-floating mb-3">
-                        <input asp-for="SubCategoryId" class="form-control" />
+                        <select asp-for="SubCategoryId" asp-items="ViewBag.Categories" class="form-select">
+                            <option value="">Kategori Seçiniz</option>
+                        </select>
                         <label asp-for="SubCategoryId"></label>
                         <span asp-validation-for="SubCategoryId" class="text-danger"></span>
+                        <p class="m-0 text-end">
+                            <a asp-action="categories" asp-controller="dashboard" class="link-secondary small text-decoration-none">Yeni Kategori</a>
+                        </p>
                     </div>
                     <div class="form-floating mb-3">
-                        <input asp-for="ModelId" class="form-control" />
+                        <select asp-for="ModelId" asp-items="ViewBag.Models" class="form-select">
+                            <option value="">Model Seçiniz</option>
+                        </select>
                         <label asp-for="ModelId"></label>
                         <span asp-validation-for="ModelId" class="text-danger"></span>
+                        <p class="m-0 text-end">
+                            <a asp-action="index" asp-controller="model" class="link-secondary small text-decoration-none">Yeni Model</a>
+                        </p>
                     </div>
                     <div class="form-floating mb-3">
-                        <input asp-for="BrandId" class="form-control" />
+                        <select asp-for="BrandId" asp-items="ViewBag.Brands" class="form-select">
+                            <option value="">Marka Seçiniz</option>
+                        </select>
                         <label asp-for="BrandId"></label>
                         <span asp-validation-for="BrandId" class="text-danger"></span>
+                        <p class="m-0 text-end">
+                            <a asp-action="index" asp-controller="brand" class="link-secondary small text-decoration-none">Yeni Marka</a>
+                        </p>
                     </div>
                     <div class="form-floating mb-3">
                         <input asp-for="Stock" class="form-control" />

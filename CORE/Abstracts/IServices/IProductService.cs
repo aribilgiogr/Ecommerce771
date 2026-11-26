@@ -11,5 +11,8 @@ namespace CORE.Abstracts.IServices
         IEnumerable<ProductListItemDto> GetProducts();
         Task<Reply> CreateProductAsync(NewProductDto newProduct);
         Task<Reply> DeleteProductAsync(int id);
+
+        Task<EditProductDto?> GetProductForEditAsync(int id);
+        Task<Reply> UpdateProductAsync(int id, EditProductDto updatedProduct);
     }
 }
